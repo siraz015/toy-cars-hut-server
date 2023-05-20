@@ -62,6 +62,14 @@ async function run() {
       res.send(result)
     })
 
+    // ----------
+    app.get('/mytoys/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) }
+      const result = await addToyCollection.findOne(query);
+      res.send(result);
+    })
+
     // create api for delete operation
     app.delete('/mytoys/:id', async (req, res) => {
       const id = req.params.id;
@@ -72,8 +80,27 @@ async function run() {
 
     // create api for Update Operation
     app.put('/mytoys/:id', async (req, res) => {
-      const updatedToys = req.body;
-      
+      const id = req.params.id;
+      const updateToy = req.body;
+      const filter = { _id: new ObjectId(id) }
+      const options = { upsert: true }
+      const toy = {
+        $set: {
+          pictureURL: updateToy.pictureURL,
+          name: updateToy.name,
+          sellerName: updateToy.sellerName,
+          sellerEmail: updateToy.sellerEmail,
+          availableQuantity: updateToy.availableQuantity,
+          subCategory: updateToy.subCategory,
+          price: updateToy.price,
+          rating: updateToy.rating,
+          detailDescription: updateToy.detailDescription
+        }
+      }
+
+      const result = await addToyCollection.updateOne(filter, toy, options);
+      res.send(result)
+
     })
 
     // Send a ping to confirm a successful connection
