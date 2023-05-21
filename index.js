@@ -122,8 +122,6 @@ async function run() {
       res.send(result);
     })
 
-
-
     // Implement Search Option
     const indexKeys = {
       name: 1
