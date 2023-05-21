@@ -38,7 +38,7 @@ async function run() {
 
     // get all toy
     app.get('/alltoys', async (req, res) => {
-      const cursor = addToyCollection.find();
+      const cursor = addToyCollection.find().limit(20);
       const result = await cursor.toArray();
       res.send(result)
     })
@@ -53,12 +53,11 @@ async function run() {
 
     // get specifig user data
     app.get('/mytoys', async (req, res) => {
-      console.log(req.query);
       let query = {};
       if (req.query?.sellerEmail) {
         query = { sellerEmail: req.query.sellerEmail }
       }
-      const result = await addToyCollection.find(query).toArray();
+      const result = await addToyCollection.find(query).sort({price: 1}).toArray();
       res.send(result)
     })
 
